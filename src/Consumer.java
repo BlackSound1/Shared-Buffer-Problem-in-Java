@@ -22,20 +22,31 @@ public class Consumer implements Runnable{
                 break;
             }
         }
+        System.out.println("An item has been removed from the buffer!");
     }
 
     @Override
     public void run() {
         while (true){
             Semaphore.wait(full);
+            System.out.println("The value of full is now: " + Main.full.getValue());
+
             Semaphore.wait(mutex);
+            System.out.println("The value of mutex is now: " + Main.mutex.getValue());
 
             consume();
 
             Semaphore.signal(mutex);
+            System.out.println("The value of mutex is now: " + Main.mutex.getValue());
+
             Semaphore.signal(empty);
+            System.out.println("The value of empty is now: " + Main.empty.getValue());
 
             System.out.println("Consumer has consumed the last item in the buffer!");
+
+            if (Main.empty.getValue() == Main.BUFFERSIZE){
+                System.out.println("The buffer is empty!");
+            }
         }
     }
 }
