@@ -23,16 +23,13 @@ public class Semaphore {
     public void setList(ArrayList<Thread> list) { this.list = list; }
 
     public static void wait(Semaphore s){
+        while (s.value <= 0){
+            ; // busy wait?
+        }
         s.value--;
-        /*if (s.value < 0){
-
-        }*/
     }
 
     public static void signal(Semaphore s){
         s.value++;
-        /*if (s.value <= 0){
-
-        }*/
     }
 }
