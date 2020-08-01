@@ -38,12 +38,22 @@ public class Producer implements Runnable{
             int newNum = produce();
 
             Semaphore.wait(empty);
+            System.out.println("The value of empty is now: " + Main.empty.getValue());
+
             Semaphore.wait(mutex);
+            System.out.println("The value of mutex is now: " + Main.mutex.getValue());
 
             addToBuffer(newNum);
 
             Semaphore.signal(mutex);
+            System.out.println("The value of mutex is now: " + Main.mutex.getValue());
+
             Semaphore.signal(full);
+            System.out.println("The value of full is now: " + Main.full.getValue());
+
+            if (Main.full.getValue() == 0){
+                System.out.println("The buffer is full!");
+            }
         }
     }
 
