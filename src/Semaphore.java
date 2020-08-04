@@ -17,7 +17,11 @@ public class Semaphore {
 
     public static void wait(Semaphore s){
         while (s.value <= 0){
-            ; // busy wait?
+            try {
+                Thread.sleep(500); // busy wait?
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
         s.value--;
     }

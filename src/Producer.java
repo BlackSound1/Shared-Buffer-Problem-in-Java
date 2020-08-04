@@ -1,8 +1,7 @@
 public class Producer implements Runnable{
-    private Semaphore mutex;
-    private Semaphore full;
-    private Semaphore empty;
-    private int q;
+    private final Semaphore mutex;
+    private final Semaphore full;
+    private final Semaphore empty;
 
     public Producer() {
         mutex = Main.mutex;
@@ -15,10 +14,6 @@ public class Producer implements Runnable{
     public Semaphore getFull() { return full; }
 
     public Semaphore getEmpty() { return empty; }
-
-    public int getQ() { return q; }
-
-    public void setQ(int q) { this.q = q; }
 
     public int produce(){ return 1; }
 
@@ -35,26 +30,29 @@ public class Producer implements Runnable{
     @Override
     public void run() {
         while (true){
-            int newNum = produce();
+            float P = (float) Math.random();
 
-            Semaphore.wait(empty);
-            System.out.println("The value of empty is now: " + Main.empty.getValue());
+            if (Main.q == 1 || P < Main.q){
+                int newNum = produce();
 
-            Semaphore.wait(mutex);
-            System.out.println("The value of mutex is now: " + Main.mutex.getValue());
+                Semaphore.wait(empty);
+                System.out.println("The value of empty is now: " + Main.empty.getValue());
 
-            addToBuffer(newNum);
+                Semaphore.wait(mutex);
+                System.out.println("The value of mutex is now: " + Main.mutex.getValue());
 
-            Semaphore.signal(mutex);
-            System.out.println("The value of mutex is now: " + Main.mutex.getValue());
+                addToBuffer(newNum);
 
-            Semaphore.signal(full);
-            System.out.println("The value of full is now: " + Main.full.getValue());
+                Semaphore.signal(mutex);
+                System.out.println("The value of mutex is now: " + Main.mutex.getValue());
 
-            if (Main.full.getValue() == 0){
-                System.out.println("The buffer is full!");
+                Semaphore.signal(full);
+                System.out.println("The value of full is now: " + Main.full.getValue());
+
+                if (Main.full.getValue() == 0){
+                    System.out.println("The buffer is full!");
+                }
             }
         }
     }
-
 }

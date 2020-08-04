@@ -1,7 +1,7 @@
 public class Consumer implements Runnable{
-    private Semaphore mutex;
-    private Semaphore full;
-    private Semaphore empty;
+    private final Semaphore mutex;
+    private final Semaphore full;
+    private final Semaphore empty;
 
     public Consumer() {
         mutex = Main.mutex;
@@ -28,24 +28,28 @@ public class Consumer implements Runnable{
     @Override
     public void run() {
         while (true){
-            Semaphore.wait(full);
-            System.out.println("The value of full is now: " + Main.full.getValue());
+            float C = (float) Math.random();
 
-            Semaphore.wait(mutex);
-            System.out.println("The value of mutex is now: " + Main.mutex.getValue());
+            if (Main.q == 0 || C < 1 - Main.q) {
+                Semaphore.wait(full);
+                System.out.println("The value of full is now: " + Main.full.getValue());
 
-            consume();
+                Semaphore.wait(mutex);
+                System.out.println("The value of mutex is now: " + Main.mutex.getValue());
 
-            Semaphore.signal(mutex);
-            System.out.println("The value of mutex is now: " + Main.mutex.getValue());
+                consume();
 
-            Semaphore.signal(empty);
-            System.out.println("The value of empty is now: " + Main.empty.getValue());
+                Semaphore.signal(mutex);
+                System.out.println("The value of mutex is now: " + Main.mutex.getValue());
 
-            System.out.println("Consumer has consumed the last item in the buffer!");
+                Semaphore.signal(empty);
+                System.out.println("The value of empty is now: " + Main.empty.getValue());
 
-            if (Main.empty.getValue() == Main.BUFFERSIZE){
-                System.out.println("The buffer is empty!");
+                System.out.println("Consumer has consumed the last item in the buffer!");
+
+                if (Main.empty.getValue() == Main.BUFFERSIZE){
+                    System.out.println("The buffer is empty!");
+                }
             }
         }
     }
