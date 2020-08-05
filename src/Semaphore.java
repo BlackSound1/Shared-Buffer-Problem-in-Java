@@ -16,13 +16,13 @@ public class Semaphore {
     public void setValue(int value) { this.value = value; }
 
     public static void wait(Semaphore s){
-        while (s.value <= 0){
-            try {
+        while (s.value <= 0);
+            /*try {
                 Thread.sleep(500); // busy wait?
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            }
-        }
+            }*/
+
         s.value--;
     }
 

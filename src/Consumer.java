@@ -1,7 +1,7 @@
 public class Consumer implements Runnable{
-    private final Semaphore mutex;
-    private final Semaphore full;
-    private final Semaphore empty;
+    private Semaphore mutex;
+    private Semaphore full;
+    private Semaphore empty;
 
     public Consumer() {
         mutex = Main.mutex;
