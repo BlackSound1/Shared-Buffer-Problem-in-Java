@@ -40,13 +40,14 @@ public class Consumer implements Runnable{
                 }
                 Semaphore.wait(Main.full);
 
-                System.out.println("CONSUMER: The value of mutex is now: " + Main.mutex.getValue());
+                System.out.println("CONSUMER: Before wait: The value of mutex is now: " + Main.mutex.getValue());
                 Semaphore.wait(Main.mutex);
+                System.out.println("CONSUMER: After wait: The value of mutex is now: " + Main.mutex.getValue());
 
             consume();
-
+                System.out.println("CONSUMER:  Before signal: The value of mutex is now: " + Main.mutex.getValue());
                 Semaphore.signal(Main.mutex);
-                System.out.println("CONSUMER: The value of mutex is now: " + Main.mutex.getValue());
+                System.out.println("CONSUMER:  After signal: The value of mutex is now: " + Main.mutex.getValue());
 
                 Semaphore.signal(Main.empty);
                 System.out.println("CONSUMER: The value of empty is now: " + Main.empty.getValue());

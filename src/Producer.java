@@ -44,13 +44,15 @@ public class Producer implements Runnable{
                 }
                 Semaphore.wait(Main.empty);
 
-                System.out.println("PRODUCER: The value of mutex is now: " + Main.mutex.getValue());
+                System.out.println("PRODUCER: Before wait: The value of mutex is now: " + Main.mutex.getValue());
                 Semaphore.wait(Main.mutex);
+                System.out.println("PRODUCER: After wait: The value of mutex is now: " + Main.mutex.getValue());
 
                 addToBuffer(newNum);
 
+                System.out.println("PRODUCER: Before signal: The value of mutex is now: " + Main.mutex.getValue());
                 Semaphore.signal(Main.mutex);
-                System.out.println("PRODUCER: The value of mutex is now: " + Main.mutex.getValue());
+                System.out.println("PRODUCER: After signal: The value of mutex is now: " + Main.mutex.getValue());
 
                 Semaphore.signal(Main.full);
                 System.out.println("PRODUCER: The value of full is now: " + Main.full.getValue());
