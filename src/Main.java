@@ -1,5 +1,3 @@
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -7,11 +5,10 @@ public class Main {
 
     public static final int BUFFERSIZE = 10;
     public static int[] buffer = new int[BUFFERSIZE];
-    //public static Queue<Integer> buffer = new LinkedList<>();
 
     public static float q;
 
-    public static int n = BUFFERSIZE; // Allows empty Semaphore to change
+    public static int n = BUFFERSIZE - 1; // Allows empty Semaphore to change
     public static Semaphore mutex = new Semaphore(1);
     public static Semaphore full = new Semaphore(0);
     public static Semaphore empty = new Semaphore(n);
@@ -43,8 +40,6 @@ public class Main {
             }
 
         }*/
-
-
     }
 
     private static void zeroBuffer(){

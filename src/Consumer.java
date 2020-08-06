@@ -1,19 +1,19 @@
 public class Consumer implements Runnable{
-    private Semaphore mutex;
-    private Semaphore full;
-    private Semaphore empty;
+    /*private final Semaphore mutex;
+    private final Semaphore full;
+    private final Semaphore empty;*/
 
     public Consumer() {
-        mutex = Main.mutex;
+        /*mutex = Main.mutex;
         full = Main.full;
-        empty = Main.empty;
+        empty = Main.empty;*/
     }
 
-    public Semaphore getMutex() { return mutex; }
+    /*public Semaphore getMutex() { return mutex; }
 
     public Semaphore getFull() { return full; }
 
-    public Semaphore getEmpty() { return empty; }
+    public Semaphore getEmpty() { return empty; }*/
 
     public void consume(){
         for (int i = Main.BUFFERSIZE - 1; i > 0 ; i--){
@@ -22,33 +22,36 @@ public class Consumer implements Runnable{
                 break;
             }
         }
-        System.out.println("An item has been removed from the buffer!");
+        System.out.println("CONSUMER: An item has been removed from the buffer!");
     }
 
     @Override
     public void run() {
         while (true){
-            float C = (float) Math.random();
+            float C = 0;
+            // float C = (float) Math.random();
 
-            if (Main.q == 0 || C < 1 - Main.q) {
-                Semaphore.wait(full);
-                System.out.println("The value of full is now: " + Main.full.getValue());
+            if (C < 1 - Main.q) {
+                System.out.println("C < 1 - q");
 
-                Semaphore.wait(mutex);
-                System.out.println("The value of mutex is now: " + Main.mutex.getValue());
+                System.out.println("CONSUMER: The value of full is now: " + Main.full.getValue());
+                Semaphore.wait(Main.full);
+
+                System.out.println("CONSUMER: The value of mutex is now: " + Main.mutex.getValue());
+                Semaphore.wait(Main.mutex);
 
                 consume();
 
-                Semaphore.signal(mutex);
-                System.out.println("The value of mutex is now: " + Main.mutex.getValue());
+                Semaphore.signal(Main.mutex);
+                System.out.println("CONSUMER: The value of mutex is now: " + Main.mutex.getValue());
 
-                Semaphore.signal(empty);
-                System.out.println("The value of empty is now: " + Main.empty.getValue());
+                Semaphore.signal(Main.empty);
+                System.out.println("CONSUMER: The value of empty is now: " + Main.empty.getValue());
 
-                System.out.println("Consumer has consumed the last item in the buffer!");
+                System.out.println("CONSUMER: Consumer has consumed the last item in the buffer!");
 
-                if (Main.empty.getValue() == Main.BUFFERSIZE){
-                    System.out.println("The buffer is empty!");
+                if (Main.empty.getValue() == 0){
+                    System.out.println("CONSUMER: The buffer is empty!");
                 }
             }
         }

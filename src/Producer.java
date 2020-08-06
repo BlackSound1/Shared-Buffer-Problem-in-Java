@@ -1,19 +1,19 @@
 public class Producer implements Runnable{
-    private Semaphore mutex;
-    private Semaphore full;
-    private Semaphore empty;
+    /*private final Semaphore mutex;
+    private final Semaphore full;
+    private final Semaphore empty;*/
 
     public Producer() {
-        mutex = Main.mutex;
+        /*mutex = Main.mutex;
         full = Main.full;
-        empty = Main.empty;
+        empty = Main.empty;*/
     }
 
-    public Semaphore getMutex() { return mutex; }
+    /*public Semaphore getMutex() { return mutex; }
 
     public Semaphore getFull() { return full; }
 
-    public Semaphore getEmpty() { return empty; }
+    public Semaphore getEmpty() { return empty; }*/
 
     public int produce(){ return 1; }
 
@@ -24,33 +24,36 @@ public class Producer implements Runnable{
                 break;
             }
         }
-        System.out.println("Producer added a new item to end of buffer!");
+        System.out.println("PRODUCER: Producer added a new item to end of buffer!");
     }
 
     @Override
     public void run() {
         while (true){
-            float P = (float) Math.random();
+            float P = 0;
+            //float P = (float) Math.random();
 
-            if (Main.q == 1 || P < Main.q){
+            if (P < Main.q){
+                System.out.println("P < q");
+
                 int newNum = produce();
 
-                Semaphore.wait(empty);
-                System.out.println("The value of empty is now: " + Main.empty.getValue());
+                System.out.println("PRODUCER: The value of empty is now: " + Main.empty.getValue());
+                Semaphore.wait(Main.empty);
 
-                Semaphore.wait(mutex);
-                System.out.println("The value of mutex is now: " + Main.mutex.getValue());
+                System.out.println("PRODUCER: The value of mutex is now: " + Main.mutex.getValue());
+                Semaphore.wait(Main.mutex);
 
                 addToBuffer(newNum);
 
-                Semaphore.signal(mutex);
-                System.out.println("The value of mutex is now: " + Main.mutex.getValue());
+                Semaphore.signal(Main.mutex);
+                System.out.println("PRODUCER: The value of mutex is now: " + Main.mutex.getValue());
 
-                Semaphore.signal(full);
-                System.out.println("The value of full is now: " + Main.full.getValue());
+                Semaphore.signal(Main.full);
+                System.out.println("PRODUCER: The value of full is now: " + Main.full.getValue());
 
-                if (Main.full.getValue() == 0){
-                    System.out.println("The buffer is full!");
+                if (Main.full.getValue() == Main.BUFFERSIZE - 1){
+                    System.out.println("PRODUCER: The buffer is full!");
                 }
             }
         }
