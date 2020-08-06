@@ -16,7 +16,7 @@ public class Consumer implements Runnable{
     public Semaphore getEmpty() { return empty; }*/
 
     public void consume(){
-        for (int i = Main.BUFFERSIZE - 1; i > 0 ; i--){
+        for (int i = Main.buffer.length-1; i >= 0 ; i--){
             if (Main.buffer[i] == 1){
                 Main.buffer[i] = 0;
                 break;
@@ -35,6 +35,9 @@ public class Consumer implements Runnable{
                 System.out.println("C < 1 - q");
 
                 System.out.println("CONSUMER: The value of full is now: " + Main.full.getValue());
+                if (Main.full.getValue() == Main.n){
+                    System.out.println("CONSUMER: MUST WAIT");
+                }
                 Semaphore.wait(Main.full);
 
                 System.out.println("CONSUMER: The value of mutex is now: " + Main.mutex.getValue());
@@ -47,8 +50,11 @@ public class Consumer implements Runnable{
 
                 Semaphore.signal(Main.empty);
                 System.out.println("CONSUMER: The value of empty is now: " + Main.empty.getValue());
+                if (Main.empty.getValue() < Main.n){
+                    System.out.println("CONSUMER: MAY STOP WAITING");
+                }
 
-                System.out.println("CONSUMER: Consumer has consumed the last item in the buffer!");
+                //System.out.println("CONSUMER: Consumer has consumed the last item in the buffer!");
 
                 if (Main.empty.getValue() == 0){
                     System.out.println("CONSUMER: The buffer is empty!");

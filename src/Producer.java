@@ -39,6 +39,9 @@ public class Producer implements Runnable{
                 int newNum = produce();
 
                 System.out.println("PRODUCER: The value of empty is now: " + Main.empty.getValue());
+                if (Main.empty.getValue() == 0){
+                    System.out.println("PRODUCER: MUST WAIT");
+                }
                 Semaphore.wait(Main.empty);
 
                 System.out.println("PRODUCER: The value of mutex is now: " + Main.mutex.getValue());
@@ -51,6 +54,9 @@ public class Producer implements Runnable{
 
                 Semaphore.signal(Main.full);
                 System.out.println("PRODUCER: The value of full is now: " + Main.full.getValue());
+                if (Main.full.getValue() < Main.n){
+                    System.out.println("PRODUCER: CAN STOP WAITING");
+                }
 
                 if (Main.full.getValue() == Main.BUFFERSIZE - 1){
                     System.out.println("PRODUCER: The buffer is full!");
