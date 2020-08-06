@@ -43,7 +43,7 @@ public class Consumer implements Runnable{
                 System.out.println("CONSUMER: The value of mutex is now: " + Main.mutex.getValue());
                 Semaphore.wait(Main.mutex);
 
-                consume();
+            consume();
 
                 Semaphore.signal(Main.mutex);
                 System.out.println("CONSUMER: The value of mutex is now: " + Main.mutex.getValue());
