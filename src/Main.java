@@ -1,21 +1,24 @@
-import java.util.Random;
+import java.text.DecimalFormat;
 import java.util.Scanner;
 
 public class Main {
 
+    // Creating useful static variables
     public static final int BUFFERSIZE = 10;
     public static int[] buffer = new int[BUFFERSIZE];
+    public static DecimalFormat numberFormat = new DecimalFormat("#.00");
 
     public static float q;
 
     public static int n = BUFFERSIZE - 1; // Allows empty Semaphore to change
+
+    // Creating Semaphores
     public static Semaphore mutex = new Semaphore(1);
     public static Semaphore full = new Semaphore(0);
     public static Semaphore empty = new Semaphore(n);
 
     public static void main(String[] args) {
-        //System.out.println("TEST");
-
+        // Creating the Threads
         Thread producer = new Thread(new Producer());
         Thread consumer = new Thread(new Consumer());
 
@@ -25,21 +28,6 @@ public class Main {
 
         producer.start();
         consumer.start();
-
-        // MAIN LOOP
-        /*while (true){
-            float P = (float) Math.random();
-            float C = (float) Math.random();
-
-            if (P < q){
-                //producer.produce();
-            }
-
-            if (C < 1 - q){
-                //consumer.consume();
-            }
-
-        }*/
     }
 
     private static void zeroBuffer(){
