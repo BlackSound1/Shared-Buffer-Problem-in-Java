@@ -1,2 +1,3 @@
-# COMP346A3
-Our submission for A3
+# Shared Buffer Problem
+
+Solves the shared buffer problem in Java using semaphores with busy-waiting.
